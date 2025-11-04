@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -18,6 +18,13 @@ export default function Home() {
                             "url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1350&q=80')",
                     }}
                 ></div>
+
+                {/* LOGO */}
+                <div className="absolute px-8">
+                    <h1 className="text-3xl font-bold text-[#00b67f] font-mono tracking-tight">
+                        <Link to={"/"} >Sewna</Link>
+                    </h1>
+                </div>
 
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-center px-4">
