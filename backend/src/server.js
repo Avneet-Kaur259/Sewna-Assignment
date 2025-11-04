@@ -21,7 +21,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 app.use(express.json());
 
-app.use("/api/design", designRoutes);
+app.use("/api/designs", designRoutes);
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../frontend/dist")));
