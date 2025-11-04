@@ -24,7 +24,20 @@ export async function getDesignById(req, res) {
 export async function uploadDesign(req, res) {
     try {
         const { category, title, description, material, image, fitStyles, styleAesthetic, outfitWeight, price } = req.body;
-        const design = new Design({ category, title, description, material, image, fitStyles, styleAesthetic, outfitWeight, price });
+
+
+        let imageUrl = image;
+
+        // If image looks like base64 (not a URL), upload to Cloudinary
+        if (image && image.startsWith("data:image")) {
+            const uploadResponse = await cloudinary.uploader.upload(image, {
+                folder: "designs",
+            });
+            imageUrl = uploadResponse.secure_url;
+        }
+
+
+        const design = new Design({ category, title, description, material, image: imageUrl, fitStyles, styleAesthetic, outfitWeight, price });
 
         const savedDesign = await design.save();
         res.status(201).json(savedDesign);
@@ -37,7 +50,31 @@ export async function uploadDesign(req, res) {
 export async function updateDesign(req, res) {
     try {
         const { category, title, description, material, image, fitStyles, styleAesthetic, outfitWeight, price } = req.body;
-        const updatedDesign = await Design.findByIdAndUpdate(req.params.id, { category, title, description, material, image, fitStyles, styleAesthetic, outfitWeight, price }, { new: true });
+
+        let imageUrl = image;
+
+        if (image && image.startsWith("data:image")) {
+            const uploadResponse = await cloudinary.uploader.upload(image, {
+                folder: "designs",
+            });
+            imageUrl = uploadResponse.secure_url;
+        }
+
+        const updatedDesign = await Design.findByIdAndUpdate(
+            req.params.id,
+            {
+                category,
+                title,
+                description,
+                material,
+                image: imageUrl,
+                fitStyles,
+                styleAesthetic,
+                outfitWeight,
+                price,
+            },
+            { new: true }
+        );
         if (!updatedDesign) return res.json({ message: "Design not found" });
 
         res.status(200).json(updatedDesign);
