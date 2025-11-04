@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import path from "path";
 
 import { connectDB } from "./config/db.js";
+import authRoutes from "./routes/auth.route.js";
 
 dotenv.config();
 
@@ -11,9 +12,7 @@ const __dirname = path.resolve();
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-    res.send("Sewna");
-});
+app.use("/api/auth", authRoutes);
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../frontend/dist")));
@@ -25,6 +24,6 @@ if (process.env.NODE_ENV === "production") {
 
 connectDB().then(() => {
     app.listen(PORT, () => {
-        console.log("Server running on port: ", PORT);
+        console.log("Server running on port: " + PORT);
     });
 });
